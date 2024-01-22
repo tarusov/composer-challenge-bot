@@ -40,7 +40,7 @@ func (g *Generator) Tips() string {
 	var (
 		used      = map[int]struct{}{}
 		l         = len(g.dict.Tips)
-		tipsCount = rand.Intn(2) + 1
+		tipsCount = rand.Intn(3) + 1
 		result    = "Tips:"
 	)
 

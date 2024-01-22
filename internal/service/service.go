@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"math/rand"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -20,8 +22,10 @@ type (
 		Hello(fn, ln, un string) string
 		KeyScale() string
 		Genre() string
+		Instruments() string
 		Topics() string
 		Tips() string
+		Bye() string
 	}
 )
 
@@ -89,11 +93,16 @@ func (s *Service) Roll() string {
 		log.Println(err)
 	}
 
-	if _, err := sb.WriteString(s.txGen.KeyScale() + "\n"); err != nil {
+	if _, err := sb.WriteString(s.txGen.KeyScale() + " "); err != nil {
 		log.Println(err)
 	}
 
-	if _, err := sb.WriteString(s.txGen.Genre() + "\n\n"); err != nil {
+	if _, err := sb.WriteString(s.txGen.Genre() + " "); err != nil {
+		log.Println(err)
+	}
+
+	tempo := (rand.Intn(8) + 11) * 10
+	if _, err := sb.WriteString(fmt.Sprintf("Tempo is %d.\n\n", tempo)); err != nil {
 		log.Println(err)
 	}
 
@@ -101,7 +110,15 @@ func (s *Service) Roll() string {
 		log.Println(err)
 	}
 
-	if _, err := sb.WriteString(s.txGen.Tips()); err != nil {
+	if _, err := sb.WriteString(s.txGen.Instruments() + "\n\n"); err != nil {
+		log.Println(err)
+	}
+
+	if _, err := sb.WriteString(s.txGen.Tips() + "\n\n"); err != nil {
+		log.Println(err)
+	}
+
+	if _, err := sb.WriteString(s.txGen.Bye()); err != nil {
 		log.Println(err)
 	}
 

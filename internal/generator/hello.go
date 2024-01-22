@@ -11,6 +11,7 @@ const (
 	keyUserName  = `{{.USER_NAME}}`
 
 	defaultHello = "Hi!"
+	defaultBye   = "Bye!"
 )
 
 // Hello generates random greetings message.
@@ -47,4 +48,11 @@ func (g *Generator) helloUn(un string) string {
 		return strings.ReplaceAll(hw, keyUserName, un)
 	}
 	return defaultHello
+}
+
+func (g *Generator) Bye() string {
+	if hw := randomElem(g.dict.TextBye); hw != "" {
+		return hw
+	}
+	return defaultBye
 }

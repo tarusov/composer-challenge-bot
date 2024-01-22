@@ -26,18 +26,21 @@ type (
 	}
 
 	Dictonary struct {
-		TextHelloFn   []string `json:"text_hello_fn"`
-		TextHelloFnLn []string `json:"text_hello_fn_ln"`
-		TextHelloUn   []string `json:"text_hello_un"`
-		TextKeyScale  []string `json:"text_key_scale"`
-		Keys          []string `json:"keys"`
-		Scales        []string `json:"scales"`
-		TextTopics    []string `json:"text_topics"`
-		TextGenre     []string `json:"text_genre"`
-		GenreBase     []string `json:"genre_base"`
-		GenrePrefix   []string `json:"genre_prefix"`
-		GenrePatch    []string `json:"genre_patch"`
-		Tips          []string `json:"tips"`
+		TextHelloFn     []string `json:"text_hello_fn"`
+		TextHelloFnLn   []string `json:"text_hello_fn_ln"`
+		TextHelloUn     []string `json:"text_hello_un"`
+		TextKeyScale    []string `json:"text_key_scale"`
+		Keys            []string `json:"keys"`
+		Scales          []string `json:"scales"`
+		TextInstruments []string `json:"text_instruments"`
+		Instruments     []string `json:"instruments"`
+		TextTopics      []string `json:"text_topics"`
+		TextGenre       []string `json:"text_genre"`
+		GenreBase       []string `json:"genre_base"`
+		GenrePrefix     []string `json:"genre_prefix"`
+		GenrePatch      []string `json:"genre_patch"`
+		Tips            []string `json:"text_tips"`
+		TextBye         []string `json:"text_bye"`
 	}
 )
 
