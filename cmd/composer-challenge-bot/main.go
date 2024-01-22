@@ -5,17 +5,18 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"time"
+
+	"github.com/tarusov/composer-challenge-bot/internal/config"
+	"github.com/tarusov/composer-challenge-bot/internal/generator"
+	randomword "github.com/tarusov/composer-challenge-bot/internal/random-word"
+	"github.com/tarusov/composer-challenge-bot/internal/service"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/tarusov/composer-challenge-bot/internal/config"
-	"github.com/tarusov/composer-challenge-bot/internal/rw"
-	"github.com/tarusov/composer-challenge-bot/internal/service"
 )
 
 func main() {
 
-	cfgFn := "real_config.yml"
+	cfgFn := "config.json"
 	if len(os.Args) != 1 {
 		cfgFn = os.Args[1]
 	}
@@ -31,25 +32,32 @@ func main() {
 	}
 	tgAPI.Debug = cfg.Telegram.Debug
 
-	service := service.New(
-		tgAPI,
-		rw.New(cfg.RandomWord.URL),
-		service.WithGreetings(cfg.Greetings),
-		service.WithKeys(cfg.Keys),
-		service.WithScales(cfg.Scales),
+	gen := generator.New(
+		randomword.New(cfg.RandomWord),
+		cfg.Dictonary,
 	)
 
-	ctx, cancel := context.WithCancel(context.Background())
-	go service.ListenAndServe(ctx)
+	svc := service.New(
+		tgAPI,
+		gen,
+	)
 
+	// Run service
+	ctx, cancel := context.WithCancel(context.Background())
+	go svc.ListenAndServe(ctx)
+
+	doneCh := make(chan struct{})
+
+	// Make signal watcher
 	sigCh := make(chan os.Signal, 1)
 	signal.Notify(sigCh, os.Interrupt)
-	for range sigCh {
-		log.Printf("\nReceived an interrupt...\n\n")
+	go func() {
+		for range sigCh {
+			log.Println("Received an interrupt...")
+			cancel()
+			close(doneCh)
+		}
+	}()
 
-		// Dirty way to stop service. Sorry, i don't give a f...
-		cancel()
-		time.Sleep(time.Millisecond * 100)
-		break
-	}
+	<-doneCh
 }

@@ -1,39 +1,40 @@
-package rw
+package randomword
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/tarusov/composer-challenge-bot/internal/config"
 )
 
-// aux client params.
 const queryParamWordCount = "words"
 
 type (
-	client struct {
-		url string
+	// Client for random word API.
+	Client struct {
+		apiURL string
 	}
 )
 
-// CTOR for random words api client.
-func New(url string) *client {
-	return &client{
-		url: url,
+// CTOR
+func New(cfg config.RandomWordConfig) *Client {
+	return &Client{
+		apiURL: cfg.APIURL,
 	}
 }
 
 // Words return list of random words.
-func (c *client) Words(ctx context.Context, count int) ([]string, error) {
+func (c *Client) Words(count int) ([]string, error) {
 
 	if count < 1 {
 		count = 1
 	}
 
-	reqURL := fmt.Sprintf("%s?%s=%d", c.url, queryParamWordCount, count)
+	reqURL := fmt.Sprintf("%s?%s=%d", c.apiURL, queryParamWordCount, count)
 
-	httpReq, err := http.NewRequestWithContext(ctx, http.MethodGet, reqURL, nil)
+	httpReq, err := http.NewRequest(http.MethodGet, reqURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create http request: %w", err)
 	}

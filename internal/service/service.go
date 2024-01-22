@@ -3,87 +3,107 @@ package service
 import (
 	"context"
 	"log"
-	"time"
+	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 type (
-	// Service is main structure of bot.
+	// Service struct.
 	Service struct {
-		tgAPI          *tgbotapi.BotAPI
-		updateInterval time.Duration
-		rwAPI          randomWordAPI
-		greetings      []string
-		keys           []string
-		scales         []string
-		instruments    []string
-		genres         []string
+		tgAPI *tgbotapi.BotAPI
+		txGen textGenerator
 	}
 
-	// randomWordAPI define a methods for random words api.
-	randomWordAPI interface {
-		Words(context.Context, int) ([]string, error)
+	// textGenerator required methods.
+	textGenerator interface {
+		Hello(fn, ln, un string) string
+		KeyScale() string
+		Genre() string
+		Topics() string
+		Tips() string
 	}
 )
 
-// New create new service instance.
-func New(tgAPI *tgbotapi.BotAPI, rwAPI randomWordAPI, opts ...serviceOption) *Service {
-
-	var s = &Service{
-		tgAPI:          tgAPI,
-		updateInterval: time.Second * 60,
-		rwAPI:          rwAPI,
-		keys: []string{
-			"C",
-		},
-		scales: []string{
-			"Major",
-		},
-		genres: []string{
-			"rock",
-		},
-		instruments: []string{
-			"guitar",
-			"bass",
-			"drums",
-		},
+// CTOR.
+func New(bot *tgbotapi.BotAPI, gen textGenerator) *Service {
+	return &Service{
+		tgAPI: bot,
+		txGen: gen,
 	}
-
-	for _, opt := range opts {
-		opt(s)
-	}
-
-	return s
 }
 
-// ListenAndServe handle requests.
 func (s *Service) ListenAndServe(ctx context.Context) {
 
+	// Create update config
 	updCfg := tgbotapi.NewUpdate(0)
-	updCfg.Timeout = int(s.updateInterval.Seconds())
+	updCfg.Timeout = 30
+
+	// Create update chan
 	updCh := s.tgAPI.GetUpdatesChan(updCfg)
 
 	for {
 		select {
-		case update := <-updCh:
-
-			if update.Message == nil {
+		case upd := <-updCh:
+			if upd.Message == nil {
 				continue
 			}
-
-			switch {
-			case update.Message.Text == tgStartCmd:
-				s.handleStartCmd(ctx, update)
-
-			case update.Message.Text == tgRollCmd:
-				s.handleRollCmd(ctx, update)
-			}
+			s.handleUpdate(upd)
 
 		case <-ctx.Done():
-			log.Println("Service stopped...")
-			return
+			log.Println("Service terminated")
 		}
-
 	}
+}
+
+// handleUpdate
+func (s *Service) handleUpdate(upd tgbotapi.Update) {
+
+	var replyText string
+
+	switch upd.Message.Text {
+	case "/start":
+		replyText = s.txGen.Hello(
+			upd.Message.From.FirstName,
+			upd.Message.From.LastName,
+			upd.Message.From.UserName,
+		)
+	case "/roll":
+		replyText = s.Roll()
+	default:
+		return
+	}
+
+	reply := tgbotapi.NewMessage(upd.Message.Chat.ID, replyText)
+	reply.ParseMode = tgbotapi.ModeHTML
+
+	if _, err := s.tgAPI.Send(reply); err != nil {
+		log.Println(err)
+	}
+}
+
+func (s *Service) Roll() string {
+
+	var sb strings.Builder
+	if _, err := sb.WriteString("Here is your composer challenge:\n\n"); err != nil {
+		log.Println(err)
+	}
+
+	if _, err := sb.WriteString(s.txGen.KeyScale() + "\n"); err != nil {
+		log.Println(err)
+	}
+
+	if _, err := sb.WriteString(s.txGen.Genre() + "\n\n"); err != nil {
+		log.Println(err)
+	}
+
+	if _, err := sb.WriteString(s.txGen.Topics() + "\n\n"); err != nil {
+		log.Println(err)
+	}
+
+	if _, err := sb.WriteString(s.txGen.Tips()); err != nil {
+		log.Println(err)
+	}
+
+	return sb.String()
 }

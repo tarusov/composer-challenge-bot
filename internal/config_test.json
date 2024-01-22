@@ -1,0 +1,157 @@
+{
+    "telegram": {
+        "token": "qqck",
+        "debug": true
+    },
+    "random_word": {
+        "api_url": "http://rwapi"
+    },
+    "dict": {
+        "text_hello_fn": [
+            "Hi, {{.FIRST_NAME}}!",
+            "Hello, {{.FIRST_NAME}}!",
+            "Dear {{.FIRST_NAME}}!"
+        ],
+        "text_hello_fn_ln": [
+            "Hi, {{.FIRST_NAME}} {{.LAST_NAME}}!",
+            "Greetings, {{.FIRST_NAME}} {{.LAST_NAME}}!",
+            "Hello-Hello, {{.FIRST_NAME}} {{.LAST_NAME}}!"
+        ],
+        "text_hello_un": [
+            "Listen here, {{.USER_NAME}}!",
+            "Time to work, {{.USER_NAME}}!",
+            "{{.USER_NAME}}, Are you bored?!"
+        ],
+        "text_key_scale": [
+            "Best songs was written in {{.KEY}} {{.SCALE}}.",
+            "Write a cool track in {{.KEY}} {{.SCALE}} for me.",
+            "What about some {{.KEY}} {{.SCALE}} today?"
+        ],
+        "keys": [
+            "A",
+            "A#",
+            "B",
+            "C",
+            "C#",
+            "D",
+            "D#",
+            "E",
+            "F",
+            "F#",
+            "G",
+            "G#"
+        ],
+        "scales": [
+            "Major",
+            "Minor",
+            "Chromatic"
+        ],
+        "text_topics": [
+            "A couple of things to think about: {{.TOPICS}}",
+            "There are many sources of inspiration: {{.TOPICS}}",
+            "Themes for track can be: {{.TOPICS}}"
+        ],
+        "text_genre": [
+            "You may try yourself in <i><b>{{.GENRE}}</b></i>!",
+            "<i><b>{{.GENRE}}</b></i> back in style."
+        ],
+        "genre_base": [
+            "EDM",
+            "R&B",
+            "Ambient",
+            "Blues",
+            "Cabaret",
+            "Country",
+            "Djent",
+            "Doom",
+            "Emo",
+            "Folk",
+            "Rap",
+            "Funk",
+            "Grind",
+            "Grunge",
+            "Jazz",
+            "Metal",
+            "Metalcore",
+            "Pop",
+            "Punk",
+            "Rock",
+            "Sludge",
+            "Soul"
+        ],
+        "genre_prefix": [
+            "Acid",
+            "Black",
+            "Country",
+            "Dance",
+            "Dark",
+            "Death",
+            "Doom",
+            "Drone",
+            "Disco",
+            "Folk",
+            "Funk",
+            "Garage",
+            "Glam",
+            "Gospel",
+            "Gothic",
+            "Hard",
+            "Heavy",
+            "Indie",
+            "Jazz",
+            "Math",
+            "Neo",
+            "Noise",
+            "Nu",
+            "Occult",
+            "Pagan",
+            "Pop",
+            "Post",
+            "Power",
+            "Proto",
+            "Punk",
+            "Rap",
+            "Sludge",
+            "Soft",
+            "Soul",
+            "Space",
+            "Stoner",
+            "Synth",
+            "Surf",
+            "Swing",
+            "Thrash"
+        ],
+        "genre_patch": [
+            "Alternative",
+            "Avant-garde",
+            "Celtic",
+            "Christian",
+            "Classic",
+            "Comedy",
+            "Ethno",
+            "Experimental",
+            "Atmospheric",
+            "Brutal",
+            "Baroque",
+            "Black",
+            "Cold",
+            "Symphonic",
+            "Technical",
+            "Depressive",
+            "Electronic",
+            "Extreme",
+            "Industrial",
+            "Modern",
+            "Medieval",
+            "Northern",
+            "Progressive",
+            "Psychedelic"
+        ],
+        "tips": [
+            "Try to use odd meters",
+            "Try to use hocket in you track",
+            "Whats about some polirythmic parts?",
+            "Whats about some politonal parts?"
+        ]
+    }
+}

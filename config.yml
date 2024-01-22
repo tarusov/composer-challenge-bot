@@ -1,6 +1,0 @@
-telegram:
-  token: %TGBOT_TOKEN%
-  debug: true
-
-randomWord:
-  url: https://random-word-api.vercel.app/api
